@@ -1,8 +1,10 @@
-import { GET_BOOKS } from "../actions";
+import { GET_BOOKS, GET_BOOKS_ERROR, GET_BOOKS_LOADING } from "../actions";
 
 const initialState = {
   //we're already in the book slice of the redux store
   stock: [],
+  isLoading: true,
+  isError: false,
 };
 
 const bookReducer = (state = initialState, action) => {
@@ -11,6 +13,19 @@ const bookReducer = (state = initialState, action) => {
       return {
         ...state,
         stock: action.payload,
+      };
+    case GET_BOOKS_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload,
+        //isLoading: !state.isLoading
+        //this is an example for making this  work without an explicit payload
+        //for the action of type GET_BOOK_LOADING
+      };
+    case GET_BOOKS_ERROR:
+      return {
+        ...state,
+        isError: action.payload,
       };
     default:
       return state;

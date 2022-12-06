@@ -1,4 +1,4 @@
-import { Col, Row, Button } from "react-bootstrap";
+import { Col, Row, Button, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCartAction } from "../redux/actions";
 
@@ -8,6 +8,8 @@ const BookDetail = ({ bookSelected }) => {
 
   const userName = useSelector((state) => state.user.name);
   //userName when the app loads is an empty string
+  const areBooksError = useSelector((state) => state.book.isError);
+  const areBooksLoading = useSelector((state) => state.book.isLoading);
   return (
     <div className="mt-3 mb-4 mb-lg-0">
       {bookSelected ? (
@@ -58,7 +60,12 @@ const BookDetail = ({ bookSelected }) => {
       ) : (
         <Row>
           <Col sm={12}>
-            <h3>Start by clicking on a book!</h3>
+            {areBooksError ? (
+              <Alert variant="danger">Whoopsie, something went wrong :(</Alert>
+            ) : (
+              // <h3>Start by clicking on a book!</h3>
+              <>{!areBooksLoading && <h3>Start by clicking on a book!</h3>}</>
+            )}
           </Col>
         </Row>
       )}

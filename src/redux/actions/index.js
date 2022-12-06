@@ -1,5 +1,4 @@
 //let's manage all out actions here!
-import { useDispatch } from "react-redux";
 //best practise: instead of writing the actions manually every time,
 //let's create some functions that returns actions with dynamic payload:
 //these are called "action creators functions"
@@ -10,6 +9,8 @@ export const ADD_TO_CART = "ADD_TO_CART";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 export const SET_USERNAME = "SET_USERNAME";
 export const GET_BOOKS = "GET_BOOKS";
+export const GET_BOOKS_LOADING = "GET_BOOKS_LOADING";
+export const GET_BOOKS_ERROR = "GET_BOOKS_ERROR";
 
 //this is a fuction returning an action
 //in redux terminology, this is called an "action creator"
@@ -77,15 +78,39 @@ export const getBooksAction = () => {
       );
       if (resp.ok) {
         let fetchedBooks = await resp.json();
+
         dispatch({
           type: GET_BOOKS,
           payload: fetchedBooks,
         });
+        setTimeout(() => {
+          dispatch({
+            type: GET_BOOKS_LOADING,
+            payload: false,
+          });
+        }, 100);
       } else {
         console.log("error");
+        dispatch({
+          type: GET_BOOKS_LOADING,
+          payload: false,
+        });
+
+        dispatch({
+          type: GET_BOOKS_ERROR,
+          payload: true,
+        });
       }
     } catch (error) {
       console.log(error);
+      dispatch({
+        type: GET_BOOKS_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: GET_BOOKS_ERROR,
+        payload: true,
+      });
     }
   };
 };
